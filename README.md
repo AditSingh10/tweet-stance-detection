@@ -1,26 +1,26 @@
 # COVID-19 Vaccination Stance Detection
 
-This project implements a stance detection system for COVID-19 vaccination tweets using Google's FLAN-T5-Large model. The goal is to classify tweets into three categories: "in-favor", "against", and "neutral-or-unclear".
+This project classifies tweets about COVID-19 vaccination into three categories: "in-favor", "against", and "neutral-or-unclear". Uses Google's FLAN-T5-Large model with fine-tuning for improved performance.
 
 ## Project Structure
 
 ```
 stance/
-├── data/               
-│   ├── raw_data.csv  
-│   └── processed/     
-├── src/               
-│   ├── data/          
-│   ├── models/        
-│   ├── utils/         
-│   └── config/        
-├── models/            
-├── notebooks/         
-├── tests/             
-└── requirements.txt   
+├── data/               # Data files
+│   ├── raw_data.csv   # Original dataset
+│   └── processed/     # Processed data
+├── src/               # Source code
+│   ├── data/          # Data processing modules
+│   ├── models/        # Model implementations
+│   ├── utils/         # Utility functions
+│   └── config/        # Configuration files
+├── models/            # Saved model checkpoints
+├── notebooks/         # Jupyter notebooks for exploration
+├── tests/             # Unit tests
+└── requirements.txt   # Python dependencies
 ```
 
-## Setup
+## Getting Started
 
 1. **Install dependencies:**
    ```bash
@@ -28,7 +28,7 @@ stance/
    ```
 
 2. **Download the dataset:**
-   - Place the CSV file in `data/data.csv`
+   - Drop the CSV file in `data/raw_data.csv`
 
 3. **Run the stance detection:**
    ```bash
@@ -37,15 +37,16 @@ stance/
 
 ## Model Architecture
 
+- **Base Model**: Google FLAN-T5-Large
+- **Approach**: Zero-shot classification with prompt engineering
+- **Optional**: Fine-tuning for better performance
 
+## Dataset
+- **Size**: 5,751 tweets
+- **Classes**: 3 (in-favor, against, neutral-or-unclear)
+- **Evaluation**: F1 Score on held-out test set
 
-## Performance
-
-
-
-## Usage
-
-
+## Quick Example
 
 ## License
 
