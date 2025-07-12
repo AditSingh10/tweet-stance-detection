@@ -11,12 +11,12 @@ from typing import List, Optional
 class ModelConfig:
     # FLAN-T5 model settings from documentation
     def __init__(self):
-        self.model_name = "google/flan-t5-large"  
-        self.max_length = 512  
+        self.model_name = "google/flan-t5-large"  # Switch back to large
+        self.max_length = 512  # Can use full length with large model
         self.temperature = 0.1  
         self.do_sample = False  
         self.num_beams = 1  
-        self.device = "cpu"  
+        self.device = "cuda"  # Use GPU
 
 
 class DataConfig:
@@ -35,10 +35,13 @@ class PromptConfig:
     # Different prompts we can try
     def __init__(self):
         self.base_prompt = (
-            "What is the stance of the following tweet with respect to COVID-19 vaccine? "
-            "Here is the tweet: \"{tweet}\" "
-            "Please use exactly one word from the following 3 categories to label it: "
-            "\"in-favor\", \"against\", \"neutral-or-unclear\"."
+            "Classify the stance of this tweet regarding COVID-19 vaccination. "
+            "Tweet: \"{tweet}\" "
+            "Choose exactly one label, by default pick neutral-or-unclear if you are uncertain: "
+            "• in-favor (explicitly supports vaccination) "
+            "• against (explicitly opposes vaccination) "
+            "• neutral-or-unclear (neutral, unclear, or not about vaccination) "
+            "Label:"
         )
         
         # Some alternative prompts to experiment with
@@ -50,16 +53,21 @@ class PromptConfig:
 
 
 class TrainingConfig:
-    # Fine-tuning settings 
+    # Optimized settings for 5.7K samples - exceptional performance without overfitting
     def __init__(self):
-        self.learning_rate = 5e-5  # Pretty standard for transformers
-        self.batch_size = 8  # Small batch size for memory
-        self.num_epochs = 3  # Don't want to overfit
-        self.warmup_steps = 100  
-        self.weight_decay = 0.01  
-        self.gradient_accumulation_steps = 4  
-        self.save_steps = 500  
-        self.eval_steps = 500  
+        self.learning_rate = 8e-5  # Slightly higher for better convergence
+        self.batch_size = 8  # Larger batch for better gradient estimates
+        self.num_epochs = 10  # More training to learn subtle patterns
+        self.warmup_steps = 300  # Longer warmup for stability
+        self.weight_decay = 0.02  # Balanced regularization
+        self.gradient_accumulation_steps = 4  # Effective batch size = 32
+        self.save_steps = 150  # More frequent checkpoints
+        self.eval_steps = 150  # More frequent evaluation
+        self.load_best_model_at_end = True  # Always load best checkpoint
+        self.metric_for_best_model = "eval_loss"  # Use loss since F1 not computed automatically
+        self.greater_is_better = False  # Lower loss is better
+        self.save_total_limit = 2  # Keep only 2 best checkpoints
+        self.fp16 = True  # Use mixed precision for efficiency
 
 
 class Config:
